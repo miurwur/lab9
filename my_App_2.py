@@ -18,7 +18,7 @@ env = Environment(
     autoescape=select_autoescape()
 )
 
-main_author = Author('Роза Тихонова', 'P3122')
+main_author = Author(' ', 'P3122')
 
 
 main_app = App(
