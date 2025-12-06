@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ myapp }} - Об авторе</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">{{ myapp }}</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/">Главная</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/users">Пользователи</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/currencies">Валюты</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/author">Об авторе</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h1 class="text-center mb-4">Об авторе</h1>
+
+    {% if author %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Информация об авторе</h5>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <strong>Имя:</strong> {{ author.name }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Группа:</strong> {{ author.group }}
+                </li>
+            </ul>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        Информация об авторе не найдена
+    </div>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

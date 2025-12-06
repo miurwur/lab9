@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ myapp }} - Список валют</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+     <!-- <link rel="stylesheet" href="styles.css"> -->
+
+</head>
+<body class="container mt-4">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">{{ myapp }}</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/users">Пользователи</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/currencies">Валюты</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/author">Об авторе</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <h1 class="text-center mb-4">{{ myapp }}</h1>
+
+    {% if currencies %}
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Список валют</h5>
+        </div>
+          <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table">
+                        <tr>
+                            <th>Код валюты</th>
+                            <th>Название</th>
+                            <th>Курс (руб.)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- то что у нас парсится идет сюда -->
+                        {% for currency in currencies %}
+                        <tr>
+                            <td class="align-middle">
+                                <br>{{ currency.char_code }}</br>
+                            </td>
+                            <td class="align-middle">
+                                <br>{{ currency.name }}</br>
+                            </td>
+                            <td class="text-end align-middle" >
+                                <br>{{ currency.value|round(4) }}</br>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
