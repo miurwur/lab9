@@ -52,76 +52,76 @@ class MockApi(Api):
 
     def get_users(self) -> list[User]:
         return [
-            User(1, "Бред Питт"),
-            User(2, "Самовар Самоваров"),
-            User(3, "Миллионер Миллиардерович"),
-            User(4, "Роза Тихонова"),
-            User(5, "Петр Скалкин"),
-            User(6, "Тимофей Скакалкин"),
-            User(7, "Катя Адушкина"),
-            User(8, "Прасковья Изподмосковья"),
-            User(9, "Редиска Огородовна"),
-            User(10, "Ольга Любимка"),
-            User(11, "Огузок Трясогузкин"),
+            User(1, "Александр Иванов"),
+            User(2, "Мария Петрова"),
+            User(3, "Дмитрий Сидоров"),
+            User(4, "Екатерина Смирнова"),
+            User(5, "Михаил Кузнецов"),
+            User(6, "Анна Попова"),
+            User(7, "Сергей Васильев"),
+            User(8, "Ольга Новикова"),
+            User(9, "Андрей Морозов"),
+            User(10, "Наталья Воробьева"),
+            User(11, "Игорь Соловьев"),
         ]
 
     def get_user_currencies(self) -> list[UserCurrency]:
         return [
-            UserCurrency("R01010", 4),
-            UserCurrency("R01060", 11),
-            UserCurrency("R01020A", 10),
-            UserCurrency("R01030", 4),
-            UserCurrency("R01035", 4),
-            UserCurrency("R01080", 4),
-            UserCurrency("R01090B", 4),
-            UserCurrency("R01100", 4),
-            UserCurrency("R01105", 4),
-            UserCurrency("R01115", 4),
-            UserCurrency("R01135", 4),
-            UserCurrency("R01150", 4),
-            UserCurrency("R01200", 4),
-            UserCurrency("R01210", 4),
-            UserCurrency("R01215", 4),
-            UserCurrency("R01230", 4),
-            UserCurrency("R01235", 4),
-            UserCurrency("R01239", 4),
-            UserCurrency("R01240", 4),
-            UserCurrency("R01270", 4),
-            UserCurrency("R01280", 4),
-            UserCurrency("R01300", 4),
-            UserCurrency("R01335", 4),
-            UserCurrency("R01350", 4),
-            UserCurrency("R01355", 4),
-            UserCurrency("R01370", 4),
-            UserCurrency("R01375", 4),
-            UserCurrency("R01395", 4),
-            UserCurrency("R01500", 4),
-            UserCurrency("R01503", 4),
-            UserCurrency("R01520", 4),
-            UserCurrency("R01530", 4),
-            UserCurrency("R01535", 4),
-            UserCurrency("R01540", 4),
-            UserCurrency("R01565", 4),
-            UserCurrency("R01580", 4),
-            UserCurrency("R01585F", 4),
-            UserCurrency("R01589", 4),
-            UserCurrency("R01625", 4),
-            UserCurrency("R01670", 4),
-            UserCurrency("R01675", 4),
-            UserCurrency("R01685", 4),
-            UserCurrency("R01700J", 4),
-            UserCurrency("R01710A", 4),
-            UserCurrency("R01717", 4),
-            UserCurrency("R01720", 4),
-            UserCurrency("R01760", 4),
-            UserCurrency("R01770", 4),
-            UserCurrency("R01775", 4),
-            UserCurrency("R01800", 4),
-            UserCurrency("R01805F", 4),
-            UserCurrency("R01810", 4),
-            UserCurrency("R01815", 4),
-            UserCurrency("R01820", 4),
-            UserCurrency("R02005", 4)
+            UserCurrency("R01010", 1),  # Австралийский доллар - Александр
+            UserCurrency("R01060", 11),  # Армянский драм - Игорь
+            UserCurrency("R01020A", 2),  # Азербайджанский манат - Мария
+            UserCurrency("R01030", 5),  # Фунт стерлингов - Михаил
+            UserCurrency("R01035", 7),  # Евро - Сергей
+            UserCurrency("R01080", 3),  # Белорусский рубль - Дмитрий
+            UserCurrency("R01090B", 6),  # Болгарский лев - Анна
+            UserCurrency("R01100", 8),  # Бразильский реал - Ольга
+            UserCurrency("R01105", 4),  # Венгерский форинт - Екатерина
+            UserCurrency("R01115", 9),  # Гонконгский доллар - Андрей
+            UserCurrency("R01135", 1),  # Датская крона - Александр
+            UserCurrency("R01150", 10),  # Индийская рупия - Наталья
+            UserCurrency("R01200", 2),  # Исландская крона - Мария
+            UserCurrency("R01210", 3),  # Казахстанский тенге - Дмитрий
+            UserCurrency("R01215", 5),  # Канадский доллар - Михаил
+            UserCurrency("R01230", 7),  # Китайский юань - Сергей
+            UserCurrency("R01235", 6),  # Молдавский лей - Анна
+            UserCurrency("R01239", 8),  # Норвежская крона - Ольга
+            UserCurrency("R01240", 4),  # Польский злотый - Екатерина
+            UserCurrency("R01270", 9),  # Сингапурский доллар - Андрей
+            UserCurrency("R01280", 10),  # Таджикский сомони - Наталья
+            UserCurrency("R01300", 11),  # Турецкая лира - Игорь
+            UserCurrency("R01335", 1),  # Украинская гривна - Александр
+            UserCurrency("R01350", 2),  # Чешская крона - Мария
+            UserCurrency("R01355", 3),  # Шведская крона - Дмитрий
+            UserCurrency("R01370", 5),  # Швейцарский франк - Михаил
+            UserCurrency("R01375", 7),  # Японская иена - Сергей
+            UserCurrency("R01395", 6),  # Американский доллар - Анна
+            UserCurrency("R01500", 8),  # СДР - Ольга
+            UserCurrency("R01503", 4),  # Южноафриканский рэнд - Екатерина
+            UserCurrency("R01520", 9),  # Вон Республики Корея - Андрей
+            UserCurrency("R01530", 10),  # Новый израильский шекель - Наталья
+            UserCurrency("R01535", 11),  # Киргизский сом - Игорь
+            UserCurrency("R01540", 1),  # Литовский лит - Александр
+            UserCurrency("R01565", 2),  # Латышский лат - Мария
+            UserCurrency("R01580", 3),  # Эстонская крона - Дмитрий
+            UserCurrency("R01585F", 5),  # Грузинский лари - Михаил
+            UserCurrency("R01589", 7),  # ОАЭ дирхам - Сергей
+            UserCurrency("R01625", 6),  # Румынский лей - Анна
+            UserCurrency("R01670", 8),  # Турецкая лира (новая) - Ольга
+            UserCurrency("R01675", 4),  # Аргентинское песо - Екатерина
+            UserCurrency("R01685", 9),  # Чилийское песо - Андрей
+            UserCurrency("R01700J", 10),  # Мексиканское песо - Наталья
+            UserCurrency("R01710A", 11),  # Саудовский риял - Игорь
+            UserCurrency("R01717", 1),  # Индонезийская рупия - Александр
+            UserCurrency("R01720", 2),  # Таиландский бат - Мария
+            UserCurrency("R01760", 3),  # Филиппинское песо - Дмитрий
+            UserCurrency("R01770", 5),  # Египетский фунт - Михаил
+            UserCurrency("R01775", 7),  # Вьетнамский донг - Сергей
+            UserCurrency("R01800", 6),  # Кувейтский динар - Анна
+            UserCurrency("R01805F", 8),  # Бахрейнский динар - Ольга
+            UserCurrency("R01810", 4),  # Катарский риал - Екатерина
+            UserCurrency("R01815", 9),  # Колумбийское песо - Андрей
+            UserCurrency("R01820", 10),  # Перуанский соль - Наталья
+            UserCurrency("R02005", 11)  # Уругвайское песо - Игорь
         ]
 
 class ApplicationApi(Api):
