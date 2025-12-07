@@ -74,6 +74,8 @@ class Router(BaseHTTPRequestHandler):
         try:
             if path == '/currency/create':
                 self._handle_currency_create()
+            elif path == '/user/create':  # ДОБАВЛЯЕМ
+                self._handle_user_create()
             else:
                 self._send_error(404, "Страница не найдена")
 
@@ -95,9 +97,24 @@ class Router(BaseHTTPRequestHandler):
 
     def _handle_users(self):
         """Список пользователей"""
-        users = self.db.read_users()
-        html = self.pages.render_users(users=users)
-        self._send_html_response(html)
+        print(f"DEBUG: Обработка /users", file=sys.stderr)
+
+        try:
+            users = self.db.read_users()
+            print(f"DEBUG: Получено пользователей: {len(users)}", file=sys.stderr)
+            for i, user in enumerate(users):
+                print(f"DEBUG: Пользователь {i}: {user}", file=sys.stderr)
+
+            html = self.pages.render_users(users=users)
+            print(f"DEBUG: HTML сгенерирован, длина: {len(html)}", file=sys.stderr)
+
+            self._send_html_response(html)
+
+        except Exception as e:
+            print(f"DEBUG: Ошибка в _handle_users: {e}", file=sys.stderr)
+            import traceback
+            traceback.print_exc(file=sys.stderr)
+            self._send_error(500, f"Ошибка: {str(e)}")
 
     def _handle_user(self, params):
         """Страница пользователя"""
@@ -113,6 +130,22 @@ class Router(BaseHTTPRequestHandler):
                 self._send_error(404, "Пользователь не найден")
         else:
             self._send_error(400, "Не указан ID пользователя")
+
+    def _handle_user_create(self):
+        """Создание нового пользователя (POST)"""
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length).decode('utf-8')
+        params = parse_qs(post_data)
+
+        try:
+            name = params['name'][0]
+            user_id = self.db.create_user(name)
+            print(f"DEBUG: Создан пользователь ID={user_id}, имя={name}", file=sys.stderr)
+            self._send_redirect('/users')
+
+        except (KeyError, ValueError) as e:
+            self._send_error(400, f"Ошибка создания пользователя: {str(e)}")
+
 
     def _handle_currencies(self):
         """Список всех валют"""
@@ -175,25 +208,44 @@ class Router(BaseHTTPRequestHandler):
 
     def _handle_currency_create(self):
         """Создание новой валюты"""
+        print("=== DEBUG: Создание валюты ===", file=sys.stderr)
+
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length).decode('utf-8')
         params = parse_qs(post_data)
 
+        print(f"DEBUG: Получены параметры: {params}", file=sys.stderr)
+
         try:
             currency_data = {
                 'num_code': params['num_code'][0],
-                'char_code': params['char_code'][0],
+                'char_code': params['char_code'][0].upper(),
                 'name': params['name'][0],
                 'value': float(params['value'][0]),
                 'nominal': int(params['nominal'][0])
             }
 
+            print(f"DEBUG: Данные валюты: {currency_data}", file=sys.stderr)
+
+            # Создаем валюту
             currency_id = self.currency_ctrl.create_currency(currency_data)
-            print(f"Создана валюта ID={currency_id}", file=sys.stderr)
+            print(f"DEBUG: Валюта создана с ID={currency_id}", file=sys.stderr)
+
+            # Проверяем, что валюта действительно добавилась
+            all_currencies = self.currency_ctrl.list_currencies()
+            print(f"DEBUG: Всего валют после добавления: {len(all_currencies)}", file=sys.stderr)
+            for curr in all_currencies:
+                print(f"DEBUG: - {curr['char_code']}: {curr['value']}", file=sys.stderr)
+
+            # Редирект
+            print("DEBUG: Делаем редирект на /currencies", file=sys.stderr)
             self._send_redirect('/currencies')
 
-        except (KeyError, ValueError) as e:
-            self._send_error(400, f"Ошибка данных: {str(e)}")
+        except Exception as e:
+            print(f"DEBUG: ОШИБКА: {e}", file=sys.stderr)
+            import traceback
+            traceback.print_exc(file=sys.stderr)
+            self._send_error(500, f"Ошибка: {str(e)}")
 
     # ========== Вспомогательные методы ==========
 

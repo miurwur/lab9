@@ -1,69 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <h5 class="mb-0">Курсы валют</h5>
-    </div>
-    <div class="card-body">
-        {% if currencies %}
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Цифровой код</th>
-                    <th>Код</th>
-                    <th>Название</th>
-                    <th>Курс (руб.)</th>
-                    <th>Номинал</th>
-                    <th>Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for currency in currencies %}
-                <tr>
-                    <td>{{ currency.id }}</td>
-                    <td>{{ currency.num_code }}</td>
-                    <td><strong>{{ currency.char_code }}</strong></td>
-                    <td>{{ currency.name }}</td>
-                    <td>{{ currency.value }}</td>
-                    <td>{{ currency.nominal }}</td>
-                    <td>
-                        <a href="/currency/delete?id={{ currency.id }}" 
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Удалить валюту {{ currency.char_code }}?')">
-                            Удалить
-                        </a>
-                        <form action="/currency/update" method="GET" style="display: inline;">
-                            <input type="hidden" name="{{ currency.char_code }}" value="">
-                            <input type="number" name="value" placeholder="Новый курс" step="0.01" 
-                                   style="width: 100px; padding: 3px; margin-right: 5px;">
-                            <button type="submit" class="btn btn-sm">Обновить</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <p>Нет доступных валют</p>
-        {% endif %}
-    </div>
-</div>
+<h2>Валюты</h2>
 
-<div class="card" style="margin-top: 20px;">
-    <div class="card-header">
-        <h5 class="mb-0">Добавить новую валюту</h5>
-    </div>
-    <div class="card-body">
-        <form action="/currency/create" method="POST" style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <input type="text" name="num_code" placeholder="Цифровой код (840)" required>
-            <input type="text" name="char_code" placeholder="Символьный код (USD)" required maxlength="3">
-            <input type="text" name="name" placeholder="Название" required>
-            <input type="number" name="value" placeholder="Курс" step="0.01" required>
-            <input type="number" name="nominal" placeholder="Номинал" required>
-            <button type="submit" class="btn">Добавить</button>
-        </form>
-    </div>
-</div>
+{% if currencies %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Код</th>
+        <th>Название</th>
+        <th>Курс</th>
+        <th>Номинал</th>
+        <th>Действия</th>
+    </tr>
+    {% for currency in currencies %}
+    <tr>
+        <td>{{ currency.id }}</td>
+        <td>{{ currency.char_code }}</td>
+        <td>{{ currency.name }}</td>
+        <td>{{ currency.value }} руб.</td>
+        <td>{{ currency.nominal }}</td>
+        <td>
+            <a href="/currency/delete?id={{ currency.id }}"
+               onclick="return confirm('Удалить валюту {{ currency.char_code }}?')">
+                Удалить
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<p>Всего: {{ currencies|length }} валют</p>
+{% else %}
+<p>Валют нет</p>
+{% endif %}
+
+<h3>Добавить валюту:</h3>
+<form action="/currency/create" method="POST">
+    <input type="text" name="num_code" placeholder="Цифровой код" required>
+    <input type="text" name="char_code" placeholder="Код (USD)" maxlength="3" required>
+    <input type="text" name="name" placeholder="Название" required>
+    <input type="number" name="value" placeholder="Курс" step="0.01" required>
+    <input type="number" name="nominal" placeholder="Номинал" required>
+    <button type="submit">Добавить</button>
+</form>
 {% endblock %}

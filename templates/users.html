@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+<h2>Пользователи</h2>
+
+{% if users %}
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Действия</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>
+            <a href="/user?id={{ user.id }}">Просмотреть</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<p>Всего: {{ users|length }} пользователей</p>
+{% else %}
+<p>Пользователей нет</p>
+{% endif %}
+
+<h3>Добавить пользователя:</h3>
+<form action="/user/create" method="POST">
+    <input type="text" name="name" placeholder="Имя" required>
+    <button type="submit">Добавить</button>
+</form>
+{% endblock %}
