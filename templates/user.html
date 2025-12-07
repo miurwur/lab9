@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Пользователь: {{ user.name if user else 'Неизвестно' }}</h2>
+
+<div class="card" style="margin-bottom: 20px;">
+    <div class="card-header">
+        <h5 class="mb-0">Информация о пользователе</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>ID:</strong> {{ user.id if user else 'Нет данных' }}</p>
+        <p><strong>Имя:</strong> {{ user.name if user else 'Нет данных' }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">Подписки на валюты</h5>
+    </div>
+    <div class="card-body">
+        {% if currencies %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Название</th>
+                    <th>Курс</th>
+                    <th>Номинал</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for currency in currencies %}
+                <tr>
+                    <td><strong>{{ currency.char_code }}</strong></td>
+                    <td>{{ currency.name }}</td>
+                    <td>{{ currency.value }} руб.</td>
+                    <td>{{ currency.nominal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>Нет подписок на валюты</p>
+        {% endif %}
+    </div>
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="/users" class="btn">← Назад к списку пользователей</a>
+</div>
+{% endblock %}
