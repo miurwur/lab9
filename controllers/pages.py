@@ -39,7 +39,7 @@ class PagesController:
         return template.render(
             title="Главная страница",
             currencies=self._convert_to_dict_list(currencies),
-            author=author_info or {"name": "Студент", "group": "ПИН-123"}
+            author=author_info or {"name": "Студент", "group": "P3122"}
         )
 
     def render_author(self):
@@ -47,7 +47,7 @@ class PagesController:
         template = self.env.get_template("author.html")
         return template.render(
             title="Об авторе",
-            author={"name": "Студент", "group": "ПИН-123"}
+            author={"name": "Студент", "group": "P3122"}
         )
 
     def render_users(self, users=None):
