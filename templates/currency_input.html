@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+    <meta charset="utf-8">
+    <style>
+        body { font-family: 'Segoe UI', Arial; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; text-align: center; }
+        h2 { color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+
+        .message { padding: 15px; margin: 15px 0; border-radius: 4px; border-left: 4px solid; }
+        .success { background-color: #d4edda; border-color: #28a745; color: #155724; }
+        .error { background-color: #f8d7da; border-color: #dc3545; color: #721c24; }
+
+        .navigation { list-style: none; padding: 0; display: flex; gap: 15px; margin-bottom: 30px; }
+        .navigation a { text-decoration: none; color: #3498db; padding: 10px 20px; border: 1px solid #3498db; border-radius: 4px; }
+        .navigation a:hover { background-color: #3498db; color: white; }
+
+        .search-form, .update-form { background: white; padding: 25px; margin-bottom: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input[type="text"], input[type="number"] { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
+
+        button, .btn { background-color: #3498db; color: white; padding: 12px 25px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; margin: 5px; }
+        button:hover, .btn:hover { background-color: #2980b9; }
+        .btn-danger { background-color: #e74c3c; }
+        .btn-danger:hover { background-color: #c0392b; }
+        .btn-success { background-color: #2ecc71; }
+        .btn-success:hover { background-color: #27ae60; }
+
+        .currencies-table { width: 100%; background: white; border-collapse: collapse; margin: 20px 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .currencies-table th { background-color: #3498db; color: white; text-align: left; padding: 15px; }
+        .currencies-table td { padding: 15px; border-bottom: 1px solid #eee; }
+        .currencies-table tr:hover { background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    {% if error and error != "" %}
+    <div class="message error"><strong>Ошибка:</strong> {{ error }}</div>
+    {% endif %}
+
+    {% if message and message != "" %}
+    <div class="message success">{{ message }}</div>
+    {% endif %}
+
+    <ul class="navigation">
+        {% for item in navigation %}<li><a href="{{ item.href }}">{{ item.caption }}</a></li>{% endfor %}
+    </ul>
+
+    <!-- Форма поиска валюты -->
+    <div class="search-form">
+        <h2>Поиск валюты</h2>
+        <form method="POST" action="/currency_submit">
+            <input type="text" name="currency_code" placeholder="Введите код валюты (например: USD, EUR, GBP)" required>
+            <button type="submit">Узнать курс</button>
+        </form>
+    </div>
+
+    <!-- Форма обновления курса -->
+    <div class="update-form">
+        <h2>Обновление курса</h2>
+        <form method="GET" action="/currency/update">
+            <input type="text" name="currency_code" placeholder="Код валюты (USD)" required>
+            <input type="number" step="0.01" name="new_value" placeholder="Новый курс" required>
+            <button type="submit" class="btn-success">Обновить курс</button>
+        </form>
+        <p style="color: #666; font-size: 14px; margin-top: 10px;">
+            Пример URL: /currency/update?USD=75.50
+        </p>
+    </div>
+
+    <div class="cbr-form" style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h2>Загрузка курсов от ЦБ РФ</h2>
+        <p style="color: #666; margin-bottom: 15px;">
+            Загрузите актуальные курсы валют с сайта Центробанка России
+        </p>
+        <a href="/load_cbr_rates" class="btn" style="background-color: #9b59b6;">
+            Загрузить актуальные курсы от ЦБ РФ
+        </a>
+        <p style="color: #666; font-size: 14px; margin-top: 10px;">
+            Обновит курсы: USD, EUR, GBP, CNY, JPY, CHF
+        </p>
+    </div>
+
+    <!-- Таблица всех валют -->
+    <h2>Все валюты в базе данных</h2>
+
+    {% if currencies and currencies|length > 0 %}
+    <table class="currencies-table">
+        <thead>
+            <tr>
+                <th>ID</th><th>Цифровой код</th><th>Символьный код</th><th>Название</th><th>Курс (₽)</th><th>Номинал</th><th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for currency in currencies %}
+            <tr>
+                <td>{{ currency.id }}</td>
+                <td>{{ currency.num_code }}</td>
+                <td><strong>{{ currency.char_code }}</strong></td>
+                <td>{{ currency.name }}</td>
+                <td>{{ "%.4f"|format(currency.value) }}</td>
+                <td>{{ currency.nominal }}</td>
+                <td>
+                    <a href="/currency/delete?id={{ currency.id }}" class="btn btn-danger"
+                       onclick="return confirm('Удалить {{ currency.char_code }}?')">Удалить</a>
+                    <a href="/currency/{{ currency.char_code }}" class="btn">Подробнее</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p>Всего валют: {{ currencies|length }}</p>
+    {% else %}
+    <div class="message">
+        <p>В базе данных нет валют.</p>
+    </div>
+    {% endif %}
+
+    <!-- Быстрые действия для тестирования -->
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 30px;">
+        <h3>Тестовые действия:</h3>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <a href="/currency/update?USD=85.0" class="btn">USD=85</a>
+            <a href="/currency/update?USD=90.0" class="btn">USD=90</a>
+            <a href="/currency/update?EUR=105.0" class="btn">EUR=105</a>
+            <a href="/add_test_data" class="btn btn-success">+ Добавить тестовые данные</a>
+            <a href="/clear_data" class="btn btn-danger"
+               onclick="return confirm('Очистить всю БД?')">Очистить БД</a>
+        </div>
+        <p style="color: #666; font-size: 14px; margin-top: 10px;">
+            После действий обновите страницу (F5)
+        </p>
+    </div>
+
+    <script>
+        setTimeout(function() {
+            var messages = document.querySelectorAll('.message');
+            messages.forEach(function(m) { m.style.display = 'none'; });
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <h1>{{title}}</h1>
+
+    {% if error and error != "" %}
+    <div style="color: red; border: 1px solid red; padding: 10px; margin: 10px 0;">
+      <strong>Ошибка:</strong> {{ error }}
+    </div>
+    {% endif %}
+
+    {% if message and message != "" %}
+    <div style="color: green; border: 1px solid green; padding: 10px; margin: 10px 0;">
+      <strong>Успех:</strong> {{ message }}
+    </div>
+    {% endif %}
+
+    <!-- Добавление пользователя и валюты -->
+    <div class="form-container">
+      <h3>Добавить подписку на валюту</h3>
+      <form method="POST" action="/add_currency">
+        <div>
+          <input type="text" name="username" placeholder="Имя пользователя" required>
+          <small>Если пользователя нет, он будет создан автоматически</small>
+        </div>
+        <div>
+          <input type="text" name="currency" placeholder="Код валюты (USD, EUR и т.д.)" required>
+          <small>Должен существовать в базе данных</small>
+        </div>
+        <button type="submit">Добавить подписку</button>
+      </form>
+    </div>
+
+    <!-- Показываем сохраненные данные пользователей -->
+    {% if users_data %}
+    <div class="data-display">
+      <h2>Пользователи и их подписки</h2>
+
+      {% for user in users_data %}
+        <div style="margin-bottom: 20px; padding: 20px; border: 1px solid #ddd; background-color: white; border-radius: 8px;">
+          <!-- Ссылка на страницу пользователя -->
+          <h3 style="margin-top: 0;">
+            <a href="/user?id={{ user.id }}" style="text-decoration: none; color: #2c3e50;">
+              {{ user.name }}
+            </a>
+            <span style="font-size: 14px; color: #666; margin-left: 10px;">
+              ID: {{ user.id }}
+            </span>
+          </h3>
+
+          <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+            <div>
+              <p><strong>Email:</strong> {{ user.email }}</p>
+              <p><strong>Возраст:</strong> {{ user.age }}</p>
+            </div>
+
+            <div style="flex-grow: 1;">
+              <p><strong>Подписки на валюты:</strong></p>
+              {% if user.currencies and user.currencies|length > 0 %}
+                <ul style="margin: 5px 0; padding-left: 20px;">
+                  {% for curr in user.currencies %}
+                    <li>
+                      <a href="/currency/{{ curr.char_code }}" style="text-decoration: none; color: #3498db;">
+                        {{ curr.char_code }} - {{ curr.name }}
+                      </a>
+                      <span style="color: #666; margin-left: 10px;">
+                        ({{ "%.4f"|format(curr.value) }} ₽)
+                      </span>
+                    </li>
+                  {% endfor %}
+                </ul>
+                <p style="color: #666; font-size: 14px;">
+                  Всего подписок: {{ user.currencies|length }}
+                </p>
+              {% else %}
+                <p style="color: #999; font-style: italic;">
+                  Нет подписок на валюты
+                </p>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Кнопки действий -->
+          <div style="margin-top: 15px; display: flex; gap: 10px;">
+            <a href="/user?id={{ user.id }}"
+               style="background-color: #3498db; color: white; padding: 8px 15px;
+                      text-decoration: none; border-radius: 4px; font-size: 14px;">
+               Подробная страница
+            </a>
+            <a href="/currency"
+               style="background-color: #2ecc71; color: white; padding: 8px 15px;
+                      text-decoration: none; border-radius: 4px; font-size: 14px;">
+              + Добавить еще валют
+            </a>
+          </div>
+        </div>
+      {% endfor %}
+
+      <p style="text-align: center; color: #666; margin-top: 20px;">
+        Всего пользователей: {{ users_data|length }}
+      </p>
+    </div>
+
+    {% else %}
+    <div style="text-align: center; padding: 40px; background-color: #f8f9fa; border-radius: 8px;">
+      <h3 style="color: #666;"> Пользователей пока нет</h3>
+      <p style="color: #999;">
+        Создайте первого пользователя через форму выше
+      </p>
+    </div>
+    {% endif %}
+
+    <p>{{ content }}</p>
+
+    <!-- Меню -->
+    <ul class="navigation">
+      {% for item in navigation %}
+        <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+      {% endfor %}
+    </ul>
+  </body>
+
+  <style>
+    /* Общие стили для всей страницы */
+    body {
+      font-family: 'Segoe UI', Arial;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    /* Стили для заголовка */
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+    }
+
+    /* Стили для формы */
+    .form-container {
+      background-color: white;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .form-container h3 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    /* Стили для полей ввода */
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    small {
+      display: block;
+      color: #666;
+      font-size: 12px;
+      margin-bottom: 15px;
+    }
+
+    /* Стили кнопки */
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 12px 25px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: background-color 0.3s;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    /* Стили кнопки при наведении */
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Стили для отображения данных */
+    .data-display {
+      background-color: white;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .data-display h2 {
+      color: #2c3e50;
+      margin-top: 0;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #eee;
+    }
+
+    /* Стили для навигации */
+    .navigation {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .navigation li {
+      margin: 0;
+    }
+
+    .navigation a {
+      text-decoration: none;
+      color: #3498db;
+      padding: 10px 20px;
+      display: block;
+      transition: background-color 0.3s;
+      border: 1px solid #3498db;
+      border-radius: 4px;
+    }
+
+    .navigation a:hover {
+      background-color: #3498db;
+      color: white;
+    }
+
+    /* Автоматическое скрытие сообщений */
+    [style*="color: red"], [style*="color: green"] {
+      animation: fadeOut 5s forwards;
+      animation-delay: 3s;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; height: 0; padding: 0; margin: 0; border: none; }
+    }
+  </style>
+</html>

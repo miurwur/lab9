@@ -1,8 +1,5 @@
-# models/__init__.py
-# Экспортируем модели
-
-from .user import User
-from .currency import Currency
-from .user_currency import UserCurrency
-
-__all__ = ['User', 'Currency', 'UserCurrency']
+from .users import Users_id
+from .currency import CurrencyID
+from .currency import get_currencies
+from .currencies_users import Currencies_users
+# Модули
