@@ -155,5 +155,14 @@ def _delete(self, currency_id):
 ```
 
 5. Скриншоты работы приложения
-
-
+5.1 Главная страница (/currency) - таблица валют с CRUD операциями:  
+   <img width="1087" height="544" alt="Снимок" src="https://github.com/user-attachments/assets/32d4fca3-b608-4107-85d7-72a793ad4671" />
+   Загрузка актуальных данных о валютах с ЦБ РФ:  
+<img width="1025" height="523" alt="2" src="https://github.com/user-attachments/assets/c3adc07c-6d29-436e-83e4-c31234323965" />
+5.2 Отображение курса валюты:
+   <img width="1146" height="514" alt="1" src="https://github.com/user-attachments/assets/8df8252d-832e-4f68-9d89-c91bbe4b70a1" />  
+5.3 Страница пользователей и валют, на которые они подписаны:
+   <img width="869" height="593" alt="3" src="https://github.com/user-attachments/assets/d078df6c-db1d-4d76-960b-649ae764138b" />  
+<img width="1058" height="616" alt="4" src="https://github.com/user-attachments/assets/8a8b3bc7-e9f3-45fd-9812-8f21888b3f3f" />  
+5.4 Страница пользователя:
+   <img width="925" height="595" alt="5" src="https://github.com/user-attachments/assets/4b7801d6-ad51-4a53-bf50-2d013337a298" />
