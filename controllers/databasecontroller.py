@@ -80,7 +80,7 @@ class CurrencyRatesCRUD:
             return cursor.rowcount > 0
 
     def add_test_currencies(self):
-        """Добавить тестовые валюты (для инициализации)"""
+        """Добавить тестовые валюты """
         test_data = [
             {"num_code": "840", "char_code": "USD", "name": "Доллар США", "value": 90.0, "nominal": 1},
             {"num_code": "978", "char_code": "EUR", "name": "Евро", "value": 100.0, "nominal": 1},
