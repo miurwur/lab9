@@ -154,7 +154,9 @@ def _delete(self, currency_id):
 # Пример запроса: DELETE FROM currency WHERE id = 1
 ```
 
-5. Скриншоты работы приложения
+  
+**5. Скриншоты работы приложения**  
+  
 5.1 Главная страница (/currency) - таблица валют с CRUD операциями:  
    <img width="1087" height="544" alt="Снимок" src="https://github.com/user-attachments/assets/32d4fca3-b608-4107-85d7-72a793ad4671" />
    Загрузка актуальных данных о валютах с ЦБ РФ:  
