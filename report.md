@@ -11,7 +11,32 @@
 Использовать архитектуру MVC и соблюдать разделение ответственности  
 Научиться тестировать функционал на примере сущностей currency и user с использованием unittest.mock  
 
-**2. Описание моделей, их свойств и связей**  
+**3. Структура проекта** 
+my_App/  
+├── controllers/                    # Контроллеры (архитектура MVC)  
+│   ├── __init__.py  
+│   ├── databasecontroller.py      # Низкоуровневый контроллер БД  
+│   └── currencycontroller.py      # Бизнес-логика для валют  
+├── models/                        # Модели предметной области  
+│   ├── __init__.py  
+│   ├── currency.py  
+│   ├── users.py  
+│   └── currencies_users.py  
+├── templates/                     # HTML шаблоны  
+│   ├── currency_input.html  
+│   ├── currencies_users.html  
+│   ├── currency_result.html  
+│   ├── user_page.html  
+│   ├── page1.html  
+│   └── page2.html  
+├── test_currency.py               # Тесты для валют  
+├── test_user_model.py             # Тесты для пользователей  
+├── my_App.py                      # Главный файл приложения  
+└── README.md  
+
+
+
+**3. Описание моделей, их свойств и связей**  
 Модель Currency (Валюта)
 ```python
 class Currency:
@@ -70,4 +95,65 @@ CREATE TABLE user_currency (
 Одна валюта может быть в подписках у множества пользователей
 
 Связь осуществляется через промежуточную таблицу user_currency
+
+**4. Реализация CRUD с примерами SQL-запросов**  
+Create - добавление новой валюты  
+```python
+# Метод в databasecontroller.py
+def _create(self, data):
+    with closing(self.connection.cursor()) as cursor:
+        cursor.execute("""
+            INSERT INTO currency(num_code, char_code, name, value, nominal)
+            VALUES(:num_code, :char_code, :name, :value, :nominal)
+        """, data)  # Параметризованный запрос
+        self.connection.commit()
+        return cursor.lastrowid
+
+# Использование:
+db_crud._create({
+    'num_code': '840',
+    'char_code': 'USD',
+    'name': 'Доллар США',
+    'value': 90.0,
+    'nominal': 1
+})
+```
+Read - получение всех валют
+```python
+def _read(self):
+    with closing(self.connection.cursor()) as cursor:
+        cursor.execute("SELECT * FROM currency ORDER BY char_code")
+        return [dict(row) for row in cursor.fetchall()]
+
+# В контроллере:
+def list_currencies(self):
+    return self.db._read()
+```
+Update - изменение курса валюты
+```python
+def _update(self, updates):
+    with closing(self.connection.cursor()) as cursor:
+        for char_code, new_value in updates.items():
+            cursor.execute(
+                "UPDATE currency SET value = ? WHERE UPPER(char_code) = UPPER(?)",
+                (new_value, char_code)  # Параметризованный запрос
+            )
+        self.connection.commit()
+    return True
+
+# Пример запроса: UPDATE currency SET value = 95.5 WHERE char_code = 'USD'
+```
+Delete - удаление валюты по ID
+```python
+def _delete(self, currency_id):
+    with closing(self.connection.cursor()) as cursor:
+        cursor.execute("DELETE FROM currency WHERE id = ?", (currency_id,))
+        self.connection.commit()
+        return cursor.rowcount > 0
+
+# Пример запроса: DELETE FROM currency WHERE id = 1
+```
+
+5. Скриншоты работы приложения
+
 
